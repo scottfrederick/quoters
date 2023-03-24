@@ -1,0 +1,77 @@
+server:
+  port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "!default"
+
+server:
+  port: 8443
+  ssl:
+    bundle: "test-cert"
+management:
+  server:
+    ssl:
+      bundle: "test-cert"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "p12"
+  ssl:
+    jks:
+      test-cert:
+        key-store: "classpath:server.p12"
+        key-store-password: "secret"
+        key-store-type: "PKCS12"
+        key-alias: "spring-boot-server"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "pem"
+  ssl:
+    certificate:
+      test-cert:
+        certificate: "classpath:server.crt"
+        certificate-private-key: "classpath:server.key"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "p12-mtls"
+  ssl:
+    jks:
+      test-cert:
+        key-store: "classpath:server.p12"
+        key-store-password: "secret"
+        key-store-type: "PKCS12"
+        key-alias: "spring-boot-server"
+        trust-store: "classpath:client-trust.p12"
+        trust-store-password: "secret"
+        trust-store-type: "PKCS12"
+
+server:
+  ssl:
+    client-auth: "NEED"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "pem-mtls"
+  ssl:
+    certificate:
+      test-cert:
+        certificate: "classpath:server.crt"
+        certificate-private-key: "classpath:server.key"
+        trust-certificate: "classpath:client.crt"
+
+server:
+  ssl:
+    client-auth: "NEED"

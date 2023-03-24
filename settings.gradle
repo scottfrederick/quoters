@@ -1,0 +1,14 @@
+pluginManagement {
+	repositories {
+		mavenLocal()
+		maven { url 'https://repo.spring.io/milestone' }
+		maven { url 'https://repo.spring.io/snapshot' }
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'quoters'
+
+include 'server'
+include 'client-resttemplate'
+include 'client-webclient'

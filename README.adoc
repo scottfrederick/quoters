@@ -1,0 +1,133 @@
+# Securing Spring Boot applications with SSL
+
+This repository contains a sample of configuring Spring Boot client and server applications to use SSL for one-way and two-way (mutual) authentication.
+
+### Securing the server using PKCS12 keystores
+
+In this scenario, the server is secured with a certificate and private key pair stored in a PKCS12 keystore file created by the Java `keytool` utility.
+The server is configured to use the keystore file containing both the certificate and private key.
+The client is configured to use another keystore file containing only the server's certificate.
+The server expects the client to pass the certificate for authentication.
+
+#### Running the samples
+
+Generate the certificate and private key pair keystore for the server, and the certificate keystore for the clients:
+
+```
+./scripts/create-server-p12-cert.sh
+```
+
+Start the server using a profile that activates the certificates:
+
+```
+./gradlew :server:bootRun --args='--spring.profiles.active=p12'
+```
+
+Start one of the clients using a profile that activates the certificates:
+
+```
+./gradlew :client-resttemplate:bootRun --args='--spring.profiles.active=p12'
+./gradlew :client-webclient:bootRun --args='--spring.profiles.active=p12'
+```
+
+
+### Securing the server using PEM certificates
+
+In this scenario, the server is secured with a certificate and a private key stored in separate PEM-encoded text files created by the `openssl` utility.
+The server is configured to use both of the PEM files containing the certificate and private key.
+The client is configured to use only the PEM file containing the certificate.
+The server expects the client to pass the certificate for authentication.
+
+#### Running the samples
+
+Generate the certificate and private key for the server:
+
+```
+./scripts/create-server-pem-cert.sh
+```
+
+Start the server using a profile that activates the certificates:
+
+```
+./gradlew :server:bootRun --args='--spring.profiles.active=pem'
+```
+
+Start one of the clients using a profile that activates the certificates:
+
+```
+./gradlew :client-resttemplate:bootRun --args='--spring.profiles.active=pem'
+./gradlew :client-webclient:bootRun --args='--spring.profiles.active=pem'
+```
+
+### Securing the client and server with mutual TLS using PKCS12 keystores
+
+In this scenario, the server is secured with a certificate and a private key stored in a PKCS12 keystore file created by the Java `keytool` utility.
+The client is also secured with a separate certificate and private key stored in a keystore file.
+The server is configured to use the keystore file containing its certificate and private key, and is also configured to use a separate keystore file containing only the client's certificate.
+The client is configured to use the keystore file containing its certificate and private key, and is also configured to use a separate keystore file containing only the server's certificate.
+The client and server perform a handshake by passing each other's certificates for authentication.
+
+#### Running the samples
+
+Generate they keystores for the server:
+
+```
+./scripts/create-server-p12-cert.sh
+```
+
+Generate the keystores for the client:
+
+```
+./scripts/create-client-p12-cert.sh
+```
+
+Start the server using a profile that activates mutual TLS with the certificates:
+
+```
+./gradlew :server:bootRun --args='--spring.profiles.active=p12,mtls'
+```
+
+Start one of the clients using a profile that mutual TLS activates the certificates:
+
+```
+./gradlew :client-resttemplate:bootRun --args='--spring.profiles.active=p12-mtls'
+./gradlew :client-webclient:bootRun --args='--spring.profiles.active=p12-mtls'
+```
+
+
+### Securing the client and server with mutual TLS using PEM encoded certificates
+
+In this scenario, the server is secured with a certificate and a private key stored in separate PEM-encoded text files created by the `openssl` utility.
+The client is also secured with a separate certificate and private key stored in PEM-encoded files.
+The server is configured to use both of the PEM files containing its certificate and private key, and is also configured to use the PEM file containing the client's certificate.
+The client is configured to use both of the PEM files containing its certificate and private key, and is also configured to use the PEM file containing the server's certificate.
+The client and server perform a handshake by passing each other's certificates for authentication.
+
+#### Running the samples
+
+Generate the certificate and private key for the server:
+
+```
+./scripts/create-server-pem-cert.sh
+```
+
+Generate the certificate and private key for the clients:
+
+```
+./scripts/create-client-pem-cert.sh
+```
+
+Start the server using a profile that activates mutual TLS with the certificates:
+
+```
+./gradlew :server:bootRun --args='--spring.profiles.active=pem,mtls'
+```
+
+Start one of the clients using a profile that mutual TLS activates the certificates:
+
+```
+./gradlew :client-resttemplate:bootRun --args='--spring.profiles.active=pem-mtls'
+./gradlew :client-webclient:bootRun --args='--spring.profiles.active=pem-mtls'
+```
+
+
