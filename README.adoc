@@ -84,7 +84,7 @@ Generate the keystores for the client:
 Start the server using a profile that activates mutual TLS with the certificates:
 
 ```
-./gradlew :server:bootRun --args='--spring.profiles.active=p12,mtls'
+./gradlew :server:bootRun --args='--spring.profiles.active=p12-mtls'
 ```
 
 Start one of the clients using a profile that mutual TLS activates the certificates:
@@ -120,7 +120,7 @@ Generate the certificate and private key for the clients:
 Start the server using a profile that activates mutual TLS with the certificates:
 
 ```
-./gradlew :server:bootRun --args='--spring.profiles.active=pem,mtls'
+./gradlew :server:bootRun --args='--spring.profiles.active=pem-mtls'
 ```
 
 Start one of the clients using a profile that mutual TLS activates the certificates:
