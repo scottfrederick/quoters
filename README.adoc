@@ -1,6 +1,8 @@
-# Securing Spring Boot applications with SSL
+# Securing Spring Boot applications with SSL/TLS
 
-This repository contains a sample of configuring Spring Boot client and server applications to use SSL for one-way and two-way (mutual) authentication.
+This repository contains a sample of configuring Spring Boot client and server applications to use SSL/TLS for one-way and two-way (mutual) authentication.
+
+## One-way TLS
 
 ### Securing the server using PKCS12 keystores
 
@@ -58,6 +60,7 @@ Start one of the clients using a profile that activates the certificates:
 ./gradlew :client-resttemplate:bootRun --args='--spring.profiles.active=pem'
 ./gradlew :client-webclient:bootRun --args='--spring.profiles.active=pem'
 ```
+## Mutual (two-way) TLS
 
 ### Securing the client and server with mutual TLS using PKCS12 keystores
 
