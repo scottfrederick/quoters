@@ -1,10 +1,11 @@
 # Securing Spring Boot applications with SSL/TLS
+:toc:
 
 This repository contains a sample of configuring Spring Boot client and server applications to use SSL/TLS for one-way and two-way (mutual) authentication.
 
-## One-way TLS
+## Securing the server with one-way TLS
 
-### Securing the server using PKCS12 keystores
+### Using PKCS12 keystores
 
 In this scenario, the server is secured with a self-signed certificate and private key pair stored in a PKCS12 keystore file created by the Java `keytool` utility.
 The server is configured to use the keystore file containing both the certificate and private key.
@@ -33,7 +34,7 @@ Start one of the clients using a profile that activates the certificates:
 ```
 
 
-### Securing the server using PEM certificates
+### Using PEM certificates
 
 In this scenario, the server is secured with a self-signed certificate and a private key stored in separate PEM-encoded text files created by the `openssl` utility.
 The server is configured to use both of the PEM files containing the certificate and private key.
@@ -60,9 +61,10 @@ Start one of the clients using a profile that activates the certificates:
 ./gradlew :client-resttemplate:bootRun --args='--spring.profiles.active=pem'
 ./gradlew :client-webclient:bootRun --args='--spring.profiles.active=pem'
 ```
-## Mutual (two-way) TLS
 
-### Securing the client and server with mutual TLS using PKCS12 keystores
+## Securing the client and server with mutual (two-way) TLS
+
+### Using PKCS12 keystores
 
 In this scenario, the server is secured with a self-signed certificate and a private key stored in a PKCS12 keystore file created by the Java `keytool` utility.
 The client is also secured with a separate certificate and private key stored in a keystore file.
@@ -98,7 +100,7 @@ Start one of the clients using a profile that mutual TLS activates the certifica
 ```
 
 
-### Securing the client and server with mutual TLS using PEM encoded certificates
+### Using PEM encoded certificates
 
 In this scenario, the server is secured with a self-signed certificate and a private key stored in separate PEM-encoded text files created by the `openssl` utility.
 The client is also secured with a separate certificate and private key stored in PEM-encoded files.
@@ -134,7 +136,7 @@ Start one of the clients using a profile that mutual TLS activates the certifica
 ```
 
 
-### Securing the client and server with mutual TLS using PEM encoded certificates and a root certificate authority
+### Using PEM encoded certificates and a root certificate authority
 
 In this scenario, a self-signed root certificate authority (CA) certificate and private key are created, then server and client certificates and private keys are created and signed with the root CA certificate.
 The server and client are secured with their own certificate and private key.
