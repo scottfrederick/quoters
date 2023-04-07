@@ -75,3 +75,19 @@ spring:
 server:
   ssl:
     client-auth: "NEED"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "pem-ca-mtls"
+  ssl:
+    certificate:
+      test-cert:
+        certificate: "classpath:server.crt"
+        certificate-private-key: "classpath:server.key"
+        trust-certificate: "classpath:root-ca.crt"
+
+server:
+  ssl:
+    client-auth: "NEED"

@@ -1,6 +1,8 @@
 **/*.p12
 **/*.crt
 **/*.key
+**/*.csr
+**/*.ext
 
 .gradle
 build/

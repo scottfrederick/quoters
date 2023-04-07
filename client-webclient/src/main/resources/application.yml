@@ -59,3 +59,15 @@ spring:
         certificate: "classpath:client.crt"
         certificate-private-key: "classpath:client.key"
         trust-certificate: "classpath:server.crt"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "pem-ca-mtls"
+  ssl:
+    certificate:
+      test-cert:
+        certificate: "classpath:client.crt"
+        certificate-private-key: "classpath:client.key"
+        trust-certificate: "classpath:root-ca.crt"

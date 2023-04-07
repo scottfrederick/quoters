@@ -9,7 +9,7 @@ fi
 # create a certificate and private key pair to identify the server application
 #
 openssl req -out server.crt -keyout server.key \
-  -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
+  -x509 -newkey rsa:4096 -sha256 -days 365 -nodes \
   -subj "/CN=example.com" -addext "subjectAltName=DNS:example.com,DNS:localhost"
 
 #
