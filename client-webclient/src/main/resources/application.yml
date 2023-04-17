@@ -21,7 +21,7 @@ spring:
     activate:
       on-profile: "p12"
   ssl:
-    jks:
+    keystore:
       test-cert:
         trust-store: "classpath:server-trust.p12"
         trust-store-password: "secret"
@@ -42,7 +42,7 @@ spring:
     activate:
       on-profile: "p12-mtls"
   ssl:
-    jks:
+    keystore:
       test-cert:
         key-store: "classpath:client.p12"
         key-store-password: "secret"

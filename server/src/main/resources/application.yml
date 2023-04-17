@@ -22,7 +22,7 @@ spring:
     activate:
       on-profile: "p12"
   ssl:
-    jks:
+    keystore:
       test-cert:
         key-store: "classpath:server.p12"
         key-store-password: "secret"
@@ -46,7 +46,7 @@ spring:
     activate:
       on-profile: "p12-mtls"
   ssl:
-    jks:
+    keystore:
       test-cert:
         key-store: "classpath:server.p12"
         key-store-password: "secret"
