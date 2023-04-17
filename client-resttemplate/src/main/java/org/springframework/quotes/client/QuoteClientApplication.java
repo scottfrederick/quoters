@@ -31,9 +31,13 @@ public class QuoteClientApplication {
 	@Bean
 	public CommandLineRunner run(RestTemplate restTemplate) {
 		return args -> {
-			QuoteResource quote = restTemplate.getForObject(baseUrl +
+			QuoteResource result = restTemplate.getForObject(baseUrl +
 					"/api/random", QuoteResource.class);
-			log.info(quote.value().quote());
+			String quote = result.value().quote();
+			log.info(quote);
+			System.out.println();
+			System.out.println("Successfully connected to server and received quote:");
+			System.out.println("\"" + quote + "\"");
 		};
 	}
 

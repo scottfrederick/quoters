@@ -42,7 +42,7 @@ public class QuoteClientApplication {
 	@Bean
 	public CommandLineRunner run(WebClient webClient) {
 		return args -> {
-			Mono<QuoteResource> quote = webClient.get()
+			Mono<QuoteResource> result = webClient.get()
 					.uri(baseUrl + "/api/random")
 					.exchangeToMono((response) -> {
 						if (response.statusCode().equals(HttpStatus.OK)) {
@@ -51,7 +51,11 @@ public class QuoteClientApplication {
 							return response.createError();
 						}
 					});
-			log.info(quote.block().value().quote());
+			String quote = result.block().value().quote();
+			log.info(quote);
+			System.out.println();
+			System.out.println("Successfully connected to server and received quote:");
+			System.out.println("\"" + quote + "\"");
 		};
 	}
 
