@@ -22,12 +22,15 @@ spring:
     activate:
       on-profile: "p12"
   ssl:
-    keystore:
-      test-cert:
-        key-store: "classpath:server.p12"
-        key-store-password: "secret"
-        key-store-type: "PKCS12"
-        key-alias: "spring-boot-server"
+    bundle:
+      jks:
+        test-cert:
+          keystore:
+            location: "classpath:server.p12"
+            password: "secret"
+            type: "PKCS12"
+          key:
+            alias: "spring-boot-server"
 
 ---
 spring:
@@ -35,10 +38,12 @@ spring:
     activate:
       on-profile: "pem"
   ssl:
-    certificate:
-      test-cert:
-        certificate: "classpath:server.crt"
-        certificate-private-key: "classpath:server.key"
+    bundle:
+      pem:
+        test-cert:
+          keystore:
+            certificate: "classpath:server.crt"
+            private-key: "classpath:server.key"
 
 ---
 spring:
@@ -46,15 +51,19 @@ spring:
     activate:
       on-profile: "p12-mtls"
   ssl:
-    keystore:
-      test-cert:
-        key-store: "classpath:server.p12"
-        key-store-password: "secret"
-        key-store-type: "PKCS12"
-        key-alias: "spring-boot-server"
-        trust-store: "classpath:client-trust.p12"
-        trust-store-password: "secret"
-        trust-store-type: "PKCS12"
+    bundle:
+      jks:
+        test-cert:
+          keystore:
+            location: "classpath:server.p12"
+            password: "secret"
+            type: "PKCS12"
+          key:
+            alias: "spring-boot-server"
+          truststore:
+            location: "classpath:client-trust.p12"
+            password: "secret"
+            type: "PKCS12"
 
 server:
   ssl:
@@ -66,11 +75,14 @@ spring:
     activate:
       on-profile: "pem-mtls"
   ssl:
-    certificate:
-      test-cert:
-        certificate: "classpath:server.crt"
-        certificate-private-key: "classpath:server.key"
-        trust-certificate: "classpath:client.crt"
+    bundle:
+      pem:
+        test-cert:
+          keystore:
+            certificate: "classpath:server.crt"
+            private-key: "classpath:server.key"
+          truststore:
+            certificate: "classpath:client.crt"
 
 server:
   ssl:
@@ -82,11 +94,14 @@ spring:
     activate:
       on-profile: "pem-ca-mtls"
   ssl:
-    certificate:
-      test-cert:
-        certificate: "classpath:server.crt"
-        certificate-private-key: "classpath:server.key"
-        trust-certificate: "classpath:root-ca.crt"
+    bundle:
+      pem:
+        test-cert:
+          keystore:
+            certificate: "classpath:server.crt"
+            private-key: "classpath:server.key"
+          truststore:
+            certificate: "classpath:root-ca.crt"
 
 server:
   ssl:

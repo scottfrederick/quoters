@@ -21,10 +21,12 @@ spring:
     activate:
       on-profile: "p12"
   ssl:
-    keystore:
-      test-cert:
-        trust-store: "classpath:server-trust.p12"
-        trust-store-password: "secret"
+    bundle:
+      jks:
+        test-cert:
+          truststore:
+            location: "classpath:server-trust.p12"
+            password: "secret"
 
 ---
 spring:
@@ -32,12 +34,15 @@ spring:
     activate:
       on-profile: "p12-mtls"
   ssl:
-    keystore:
-      test-cert:
-        key-store: "classpath:client.p12"
-        key-store-password: "secret"
-        trust-store: "classpath:server-trust.p12"
-        trust-store-password: "secret"
+    bundle:
+      jks:
+        test-cert:
+          keystore:
+            location: "classpath:client.p12"
+            password: "secret"
+          truststore:
+            location: "classpath:server-trust.p12"
+            password: "secret"
 
 ---
 spring:
@@ -45,9 +50,11 @@ spring:
     activate:
       on-profile: "pem"
   ssl:
-    certificate:
-      test-cert:
-        trust-certificate: "classpath:server.crt"
+    bundle:
+      pem:
+        test-cert:
+          truststore:
+            certificate: "classpath:server.crt"
 
 ---
 spring:
@@ -55,11 +62,14 @@ spring:
     activate:
       on-profile: "pem-mtls"
   ssl:
-    certificate:
-      test-cert:
-        certificate: "classpath:client.crt"
-        certificate-private-key: "classpath:client.key"
-        trust-certificate: "classpath:server.crt"
+    bundle:
+      pem:
+        test-cert:
+          keystore:
+            certificate: "classpath:client.crt"
+            private-key: "classpath:client.key"
+          truststore:
+            certificate: "classpath:server.crt"
 
 ---
 spring:
@@ -67,8 +77,11 @@ spring:
     activate:
       on-profile: "pem-ca-mtls"
   ssl:
-    certificate:
-      test-cert:
-        certificate: "classpath:client.crt"
-        certificate-private-key: "classpath:client.key"
-        trust-certificate: "classpath:root-ca.crt"
+    bundle:
+      pem:
+        test-cert:
+          keystore:
+            certificate: "classpath:client.crt"
+            private-key: "classpath:client.key"
+          truststore:
+            certificate: "classpath:root-ca.crt"

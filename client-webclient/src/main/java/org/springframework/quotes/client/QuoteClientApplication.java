@@ -1,7 +1,5 @@
 package org.springframework.quotes.client;
 
-import java.util.Arrays;
-
 import javax.net.ssl.SSLContext;
 
 import io.netty.handler.ssl.ClientAuth;
@@ -19,12 +17,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.boot.ssl.SslBundle;
-import org.springframework.boot.ssl.SslDetails;
+import org.springframework.boot.ssl.SslOptions;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
@@ -79,19 +78,30 @@ public class QuoteClientApplication {
 		public WebClientCustomizer webClientCustomizer(SslBundles sslBundles) {
 			return (webClientBuilder) -> {
 				SslBundle sslBundle = sslBundles.getBundle(this.sslBundle);
-				SSLContext sslContext = sslBundle.getSslContext();
-				SslDetails sslDetails = sslBundle.getDetails();
+				SSLContext sslContext = sslBundle.createSslContext();
+				SslOptions options = sslBundle.getOptions();
 
 				JdkSslContext nettySslContext = new JdkSslContext(sslContext, true,
-						(sslDetails.getCiphers() != null) ? Arrays.asList(sslDetails.getCiphers()) : null,
+						getCiphers(options),
 						IdentityCipherSuiteFilter.INSTANCE, null,
-						ClientAuth.NONE, sslDetails.getEnabledProtocols(),
+						ClientAuth.NONE,
+						getProtocols(options),
 						false);
 				HttpClient httpClient = HttpClient.create()
 						.secure((sslContextSpec) -> sslContextSpec.sslContext(nettySslContext));
 
 				webClientBuilder.clientConnector(new ReactorClientHttpConnector(httpClient)).build();
 			};
+		}
+
+		private static Iterable<String> getCiphers(SslOptions options) {
+			return (!CollectionUtils.isEmpty(options.getCiphers())) ?
+					options.getCiphers() : null;
+		}
+
+		private static String[] getProtocols(SslOptions options) {
+			return (!CollectionUtils.isEmpty(options.getEnabledProtocols())) ?
+					options.getEnabledProtocols().toArray(new String[0]) : null;
 		}
 
 	}
