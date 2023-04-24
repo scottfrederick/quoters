@@ -1,29 +1,19 @@
 package org.springframework.quotes.client;
 
-import javax.net.ssl.SSLContext;
-
-import io.netty.handler.ssl.ClientAuth;
-import io.netty.handler.ssl.IdentityCipherSuiteFilter;
-import io.netty.handler.ssl.JdkSslContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.ssl.SslBundles;
-import org.springframework.boot.ssl.SslBundle;
-import org.springframework.boot.ssl.SslOptions;
+import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientSsl;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
@@ -71,37 +61,10 @@ public class QuoteClientApplication {
 	@ConditionalOnProperty(value = "client.ssl-bundle")
 	public static class WebClientSslConfiguration {
 
-		@Value("${client.ssl-bundle}")
-		private String sslBundle;
-
 		@Bean
-		public WebClientCustomizer webClientCustomizer(SslBundles sslBundles) {
-			return (webClientBuilder) -> {
-				SslBundle sslBundle = sslBundles.getBundle(this.sslBundle);
-				SSLContext sslContext = sslBundle.createSslContext();
-				SslOptions options = sslBundle.getOptions();
-
-				JdkSslContext nettySslContext = new JdkSslContext(sslContext, true,
-						getCiphers(options),
-						IdentityCipherSuiteFilter.INSTANCE, null,
-						ClientAuth.NONE,
-						getProtocols(options),
-						false);
-				HttpClient httpClient = HttpClient.create()
-						.secure((sslContextSpec) -> sslContextSpec.sslContext(nettySslContext));
-
-				webClientBuilder.clientConnector(new ReactorClientHttpConnector(httpClient)).build();
-			};
-		}
-
-		private static Iterable<String> getCiphers(SslOptions options) {
-			return (!CollectionUtils.isEmpty(options.getCiphers())) ?
-					options.getCiphers() : null;
-		}
-
-		private static String[] getProtocols(SslOptions options) {
-			return (!CollectionUtils.isEmpty(options.getEnabledProtocols())) ?
-					options.getEnabledProtocols().toArray(new String[0]) : null;
+		public WebClientCustomizer webClientCustomizer(WebClientSsl ssl,
+													   @Value("${client.ssl-bundle}") String sslBundle) {
+			return (webClientBuilder) -> webClientBuilder.apply(ssl.fromBundle(sslBundle)).build();
 		}
 
 	}

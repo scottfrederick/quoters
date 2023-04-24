@@ -50,12 +50,10 @@ public class QuoteClientApplication {
 	@ConditionalOnProperty(value = "client.ssl-bundle")
 	public static class RestTemplateSslConfiguration {
 
-		@Value("${client.ssl-bundle}")
-		private String sslBundle;
-
 		@Bean
-		public RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer, SslBundles sslBundles) {
-			SslBundle sslBundle = sslBundles.getBundle(this.sslBundle);
+		public RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer, SslBundles sslBundles,
+													   @Value("${client.ssl-bundle}") String sslBundleName) {
+			SslBundle sslBundle = sslBundles.getBundle(sslBundleName);
 			return configurer.configure(new RestTemplateBuilder()).setSslBundle(sslBundle);
 		}
 
