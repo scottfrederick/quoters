@@ -145,8 +145,7 @@ The client and server perform a handshake by passing each other's certificates f
 
 #### Running the samples
 
-Generate the certificate and private key for the server and client.
-This will prompt for a few private key passwords, choose your own passwords and enter them at the prompts:
+Generate the certificate and private key for the server and client:
 
 ```
 ./scripts/create-server-client-pem-ca-cert.sh

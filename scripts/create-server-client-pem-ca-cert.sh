@@ -9,7 +9,7 @@ fi
 # create a root CA certificate and private key
 #
 openssl req -out root-ca.crt -keyout root-ca.key \
-  -x509 -newkey rsa:2048 -sha256 -days 365 \
+  -x509 -new -nodes -newkey rsa:2048 -sha256 -days 365 \
   -subj "/CN=example.com"
 
 cat > ca.ext << EOF
